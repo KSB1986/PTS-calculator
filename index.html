@@ -1,278 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Auriel Pro - Pharma Export</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+    <meta name="theme-color" content="#667eea" />
+    <meta
+      name="description"
+      content="Auriel PTS Calculator - Calculate brand wise and total PTS and MRP"
+    />
+    <title>Auriel PTS Calculator</title>
     <style>
-        :root {
-            --bg: #0f172a; --card: #1e293b; --gold: #fbbf24;
-            --green: #10b981; --text: #f8fafc; --muted: #94a3b8;
-            --input: #334155; --header-h: 90px;
-        }
-        body { 
-            margin: 0; font-family: system-ui, -apple-system, sans-serif; 
-            background: var(--bg); color: var(--text); padding-top: var(--header-h); 
-            user-select: none;
-        }
-        /* Fixed Header */
-        #topBar {
-            position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
-            z-index: 999; display: flex; padding: 12px; gap: 10px; 
-            border-bottom: 2px solid var(--gold); box-sizing: border-box;
-        }
-        .stat { 
-            flex: 1; background: #111827; border-radius: 10px; border: 1px solid #4b5563; 
-            display: flex; flex-direction: column; justify-content: center; text-align: center; 
-        }
-        .stat-label { font-size: 10px; color: var(--muted); font-weight: bold; text-transform: uppercase; }
-        .stat-val { font-size: 17px; font-weight: 800; }
-        .gold-text { color: var(--gold); }
-
-        .container { padding: 15px; max-width: 500px; margin: 0 auto; }
-        
-        .party-box { margin-bottom: 15px; }
-        .btn-row { display: flex; gap: 8px; margin-bottom: 20px; }
-        
-        /* Buttons */
-        .btn { 
-            flex: 1; padding: 14px; border-radius: 10px; border: none; 
-            font-weight: bold; font-size: 14px; cursor: pointer;
-        }
-        .btn:active { transform: scale(0.96); opacity: 0.9; }
-        .btn-add { background: var(--gold); color: #000; }
-        .btn-extract { background: var(--green); color: white; }
-        .btn-reset { background: #334155; color: #fca5a5; max-width: 80px; }
-
-        /* Card Design */
-        .card { 
-            background: var(--card); border-radius: 12px; padding: 15px; 
-            margin-bottom: 15px; border: 1px solid #334155; position: relative; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-        }
-        .close-btn { 
-            position: absolute; top: -10px; right: -10px; 
-            background: #ef4444; color: white; width: 28px; height: 28px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 15px; }
-        
-        input, select { 
-            width: 100%; background: var(--input); color: white; 
-            border: 1px solid #4b5563; padding: 12px; border-radius: 8px; 
-            font-size: 15px; box-sizing: border-box; outline: none; 
-        }
-        input:focus { border-color: var(--gold); }
-        .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; font-weight: bold; margin-bottom: 5px; display: block; }
-        .num { font-weight: bold; font-size: 15px; }
+      body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #root {
+              * {
+                -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+                -webkit-touch-callout: none;
+              }
+              input, textarea, select, button {
+                -webkit-touch-callout: default;
+              }
+        width: 100%;
+        height: 100%;
+      }
     </style>
-</head>
-<body>
-
-<div id="topBar">
-    <div class="stat">
-        <div class="stat-label">Total PTS</div>
-        <div class="stat-val gold-text">₹ <span id="totalPTS">0.00</span></div>
-    </div>
-    <div class="stat">
-        <div class="stat-label">Total MRP</div>
-        <div class="stat-val">₹ <span id="totalMRP">0.00</span></div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="party-box">
-        <span class="lbl">Party Name</span>
-        <input type="text" id="partyName" placeholder="Enter Party/Doctor Name...">
-    </div>
-
-    <div class="btn-row">
-        <button class="btn btn-add" id="btnAddBrand">+ ADD BRAND</button>
-        <button class="btn btn-extract" id="btnExtract">EXPORT EXCEL</button>
-        <button class="btn btn-reset" id="btnReset">✕</button>
-    </div>
-    
-    <div id="list"></div>
-</div>
-
-<script>
-// --- MASTER DATA ---
-const products = [
-    { "name": "AFDURA", "mrp": 364.69, "pts": 250.07 },
-    { "name": "BETHERAN 25", "mrp": 182.81, "pts": 125.36 },
-    { "name": "DUTAGEN SOFGEL CAP", "mrp": 321.56, "pts": 220.5 },
-    { "name": "FLOTRAL D 10S TAB", "mrp": 364.69, "pts": 250.07 },
-    { "name": "FLOTRAL T TABLETS", "mrp": 360.94, "pts": 247.5 },
-    { "name": "FLOTRAL TAB 10 MG 30'S", "mrp": 593.44, "pts": 406.93 },
-    { "name": "MYFOS", "mrp": 454.69, "pts": 311.79 },
-    { "name": "NIFTRAN 100 MG 10S", "mrp": 92.29, "pts": 63.28 },
-    { "name": "NIFTRAN 100 MG 30S", "mrp": 276.88, "pts": 189.86 },
-    { "name": "NOCULI B6 ORAL LUQUID", "mrp": 205.31, "pts": 140.79 },
-    { "name": "NOCULI ORAL SULUTION 450 ML", "mrp": 208.13, "pts": 142.71 },
-    { "name": "NOCULI TABLETS", "mrp": 68.44, "pts": 46.93 },
-    { "name": "ROLIFLO OD 2", "mrp": 263.44, "pts": 180.64 },
-    { "name": "ROLIFLO OD 4", "mrp": 367.5, "pts": 252.0 },
-    { "name": "ROLITEN OD 2", "mrp": 186.56, "pts": 127.93 },
-    { "name": "ROLITEN OD 4", "mrp": 374.06, "pts": 256.5 },
-    { "name": "ROLITEN TABLETS 1 MG", "mrp": 111.56, "pts": 76.5 },
-    { "name": "ROLITEN TABLETS 2 MG", "mrp": 194.06, "pts": 133.07 },
-    { "name": "SILODAL 4MG CAP", "mrp": 197.81, "pts": 135.64 },
-    { "name": "SILODAL 8", "mrp": 299.06, "pts": 205.07 },
-    { "name": "SILODAL D8", "mrp": 440.63, "pts": 302.14 },
-    { "name": "SILODAL D4 CAP", "mrp": 271.88, "pts": 186.43 },
-    { "name": "SILODAL M 25", "mrp": 440.63, "pts": 302.14 },
-    { "name": "SILODAL M50", "mrp": 534.38, "pts": 366.43 },
-    { "name": "SILODAL T CAP", "mrp": 446.25, "pts": 306.0 },
-    { "name": "SOLITEN ORAL SOLUTION", "mrp": 375.0, "pts": 257.14 },
-    { "name": "SOLITEN 10 TABLETS", "mrp": 480.0, "pts": 329.14 },
-    { "name": "SOLITEN 5 TABLETS", "mrp": 391.88, "pts": 268.71 }
-].sort((a, b) => a.name.localeCompare(b.name));
-
-// --- CORE FUNCTIONS ---
-
-function createNewRow() {
-    const list = document.getElementById('list');
-    const card = document.createElement('div');
-    card.className = 'card';
-    
-    let optionsHtml = products.map((p, i) => `<option value="${i}">${p.name}</option>`).join('');
-
-    card.innerHTML = `
-        <div class="close-btn">✕</div>
-        <div>
-            <span class="lbl">Select Brand</span>
-            <select class="sel-brand">
-                <option value="">-- Click to Choose --</option>
-                ${optionsHtml}
-            </select>
-        </div>
-        <div class="grid-3">
-            <div>
-                <span class="lbl">Quantity</span>
-                <input type="number" class="sel-qty" value="1" min="1" inputmode="numeric">
-            </div>
-            <div>
-                <span class="lbl">PTS Total</span>
-                <div class="num gold-text">₹ <span class="row-pts">0.00</span></div>
-            </div>
-            <div>
-                <span class="lbl">MRP Total</span>
-                <div class="num">₹ <span class="row-mrp">0.00</span></div>
-            </div>
-        </div>
-    `;
-
-    card.querySelector('.close-btn').onclick = () => { card.remove(); calcTotal(); };
-    card.querySelector('.sel-brand').onchange = () => doCalc(card);
-    card.querySelector('.sel-qty').oninput = () => doCalc(card);
-
-    list.prepend(card);
-}
-
-function doCalc(card) {
-    const idx = card.querySelector('.sel-brand').value;
-    const qty = parseFloat(card.querySelector('.sel-qty').value) || 0;
-    const pSpan = card.querySelector('.row-pts');
-    const mSpan = card.querySelector('.row-mrp');
-
-    if(idx !== "") {
-        pSpan.innerText = (products[idx].pts * qty).toFixed(2);
-        mSpan.innerText = (products[idx].mrp * qty).toFixed(2);
-    } else {
-        pSpan.innerText = "0.00"; mSpan.innerText = "0.00";
-    }
-    calcTotal();
-}
-
-function calcTotal() {
-    let tp = 0, tm = 0;
-    document.querySelectorAll('.row-pts').forEach(s => tp += parseFloat(s.innerText) || 0);
-    document.querySelectorAll('.row-mrp').forEach(s => tm += parseFloat(s.innerText) || 0);
-    
-    document.getElementById('totalPTS').innerText = tp.toLocaleString('en-IN', {minimumFractionDigits:2});
-    document.getElementById('totalMRP').innerText = tm.toLocaleString('en-IN', {minimumFractionDigits:2});
-}
-
-function exportExcel() {
-    const party = document.getElementById('partyName').value || "Unnamed_Party";
-    const now = new Date();
-    
-    // Structure for Professional Look
-    const data = [
-        ["INWARD STOCK ORDER"],
-        ["PARTY:", party.toUpperCase()],
-        ["DATE:", now.toLocaleDateString('en-IN')],
-        ["TIME:", now.toLocaleTimeString('en-IN')],
-        [],
-        ["BRAND NAME", "QUANTITY", "PTS TOTAL (₹)", "MRP TOTAL (₹)"],
-        ["----------------------------------------------------------"]
-    ];
-
-    const cards = document.querySelectorAll('.card');
-    let hasData = false;
-    
-    cards.forEach(card => {
-        const idx = card.querySelector('.sel-brand').value;
-        if (idx !== "") {
-            hasData = true;
-            data.push([
-                products[idx].name,
-                parseInt(card.querySelector('.sel-qty').value),
-                parseFloat(card.querySelector('.row-pts').innerText),
-                parseFloat(card.querySelector('.row-mrp').innerText)
-            ]);
-        }
-    });
-
-    if(!hasData) return alert("Add at least one brand first!");
-
-    data.push(["----------------------------------------------------------"]);
-    data.push(["GRAND TOTAL", "", 
-        parseFloat(document.getElementById('totalPTS').innerText.replace(/,/g,'')), 
-        parseFloat(document.getElementById('totalMRP').innerText.replace(/,/g,''))
-    ]);
-
-    const ws = XLSX.utils.aoa_to_sheet(data);
-    ws['!cols'] = [{ wch: 35 }, { wch: 10 }, { wch: 15 }, { wch: 15 }];
-    
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Order");
-
-    // APK-Friendly Save Logic
-    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
-    function s2ab(s) {
-        const buf = new ArrayBuffer(s.length);
-        const view = new Uint8Array(buf);
-        for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-        return buf;
-    }
-    const blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `Order_${party}_${now.getTime()}.xlsx`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-document.getElementById('btnAddBrand').onclick = createNewRow;
-document.getElementById('btnExtract').onclick = exportExcel;
-document.getElementById('btnReset').onclick = () => {
-    if(confirm("Clear all rows?")) {
-        document.getElementById('list').innerHTML = "";
-        document.getElementById('partyName').value = "";
-        calcTotal();
-        createNewRow();
-    }
-};
-
-// Initial Load
-window.onload = createNewRow;
-</script>
-
-</body>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
 </html>

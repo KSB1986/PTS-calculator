@@ -1,0 +1,427 @@
+.admin-panel {
+  width: 100%;
+}
+
+.panel-container {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #667eea;
+}
+
+.panel-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 24px;
+}
+
+.add-product-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.add-product-btn:hover {
+  background: #764ba2;
+}
+
+.alert {
+  padding: 15px 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.error-alert {
+  background: #ffe5e5;
+  color: #c41e3a;
+  border-left: 4px solid #c41e3a;
+}
+
+.success-alert {
+  background: #d4edda;
+  color: #155724;
+  border-left: 4px solid #155724;
+}
+
+.form-section {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  border-left: 4px solid #667eea;
+}
+
+.form-section h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.save-btn {
+  background: #667eea;
+  color: white;
+}
+
+.save-btn:hover {
+  background: #764ba2;
+}
+
+.cancel-btn {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background: #d0d0d0;
+}
+
+.products-table-wrapper {
+  overflow-x: auto;
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.products-table thead {
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.products-table th {
+  padding: 12px 10px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+}
+
+.products-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.products-table tbody tr:hover {
+  background: #f9f9f9;
+}
+
+.amount {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.actions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.3s;
+  margin-left: 5px;
+}
+
+.edit-btn {
+  background: #667eea;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #764ba2;
+}
+
+.delete-btn {
+  background: #ff4757;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #ff3838;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  padding: 40px !important;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 16px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .panel-container {
+    padding: 15px;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .panel-header h2 {
+    font-size: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+
+  .products-table th,
+  .products-table td {
+    padding: 8px 5px;
+    font-size: 12px;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    margin-left: 2px;
+  }
+}
+
+@@@media (max-width: 640px) {
+  .panel-container {
+    padding: 12px;
+  }
+
+  .panel-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .panel-header h2 {
+    font-size: 18px;
+  }
+
+  .add-product-btn {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px;
+  }
+
+  .form-section {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .form-section h3 {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .form-group input {
+    font-size: 16px;
+    padding: 12px;
+    min-height: 44px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+    justify-content: stretch;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+    min-height: 42px;
+    font-size: 14px;
+  }
+
+  .products-table th,
+  .products-table td {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    margin-left: 3px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .actions {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+}
+
+@@@media (max-width: 480px) {
+  .panel-container {
+    padding: 10px;
+  }
+
+  .panel-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .panel-header h2 {
+    font-size: 16px;
+  }
+
+  .add-product-btn {
+    font-size: 13px;
+    min-height: 42px;
+  }
+
+  .alert {
+    padding: 12px;
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+
+  .form-section {
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+
+  .form-section h3 {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+  }
+
+  .form-group input {
+    font-size: 16px;
+    padding: 11px;
+    min-height: 40px;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    min-height: 40px;
+    font-size: 13px;
+  }
+
+  .products-table th,
+  .products-table td {
+    padding: 6px 4px;
+    font-size: 10px;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    padding: 5px 8px;
+    font-size: 10px;
+    min-height: 32px;
+  }
+}
